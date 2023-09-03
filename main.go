@@ -3,11 +3,11 @@ package main
 import (
 	"Kamalesh-Seervu/singleflight/client"
 	"Kamalesh-Seervu/singleflight/server"
-	"runtime"
+	"time"
 )
 
 func main() {
 	server.ServerSetup()
-	runtime.GOMAXPROCS(runtime.NumCPU())
+	time.Sleep(5 * time.Second)
 	client.ClientEndPoint()
 }

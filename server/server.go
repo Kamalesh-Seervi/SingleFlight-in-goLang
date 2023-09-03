@@ -1,18 +1,24 @@
-package server
+package main
 
 import (
 	"fmt"
 
 	"github.com/gin-gonic/gin"
+	"golang.org/x/sync/singleflight"
 )
 
-func ServerSetup() {
+func main() {
+	var g = singleflight.Group{}
+
 	r := gin.Default()
 
 	r.GET("/api/v1/get_something", func(c *gin.Context) {
 		name := c.DefaultQuery("name", "")
-		response := processingRequest(name)
-		c.String(200, response)
+		response, _, _ := g.Do(name, func() (interface{}, error) {
+			result := processingRequest(name)
+			return result, nil
+		})
+		fmt.Fprint(c.Writer, response)
 	})
 
 	err := r.Run(":8080")

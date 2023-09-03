@@ -1,4 +1,4 @@
-package client
+package main
 
 import (
 	"fmt"
@@ -8,7 +8,7 @@ import (
 	"sync"
 )
 
-func ClientEndPoint() {
+func main() {
 	var wg sync.WaitGroup
 	endpoint := "http://localhost:8080/api/v1/get_something?name=something"
 	totalRequests := 5
@@ -18,6 +18,7 @@ func ClientEndPoint() {
 		go func(i int) {
 			defer wg.Done()
 			makeAPICall(endpoint)
+			fmt.Printf("Request %d completed\n", i)
 		}(i)
 	}
 
@@ -36,5 +37,5 @@ func makeAPICall(endpoint string) {
 	}
 
 	result := string(body)
-	fmt.Printf("%s\n", result)
+	log.Println(result)
 }
